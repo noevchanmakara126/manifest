@@ -64,7 +64,7 @@ pipeline {
                 script("docker push makarajr126/rag-ui:v${build number}"),
                 returnStdout: true
               )
-              echo "This is resutl after pushed : ${pushed}"
+              echo "This is result after pushed : ${pushed}"
             }
           }
         }
