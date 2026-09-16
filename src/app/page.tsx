@@ -5,7 +5,8 @@ export default function Home() {
       <p>Welcome to mini project</p>
       <p>This is add the ssh into the jenkins file</p>
       <p>I love hrd</p>
-      <p>I love devopsD</p>
+      <p>I love devops</p>
+      <p>I love AI LLM</p>
     </div>
   );
 }

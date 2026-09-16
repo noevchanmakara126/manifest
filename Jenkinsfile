@@ -51,7 +51,7 @@ pipeline {
                         cd 
                         cd manifest/
                         rm -rf argo
-                        git clone https://github.com/noevchanmakara126/argo.git
+                        git clone git@github.com:noevchanmakara126/argo.git
                         cd argo
                         sed -i "s/tag: .*/tag: \\"${IMAGE_TAG}\\"/" values.yaml
                         git config user.email "jenkins@ci.local"
