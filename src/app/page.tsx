@@ -4,6 +4,7 @@ export default function Home() {
       <h1>Hello World</h1>
       <p>Welcome to mini project</p>
       <p>This is add the ssh into the jenkins file</p>
+      <p>I love hrd</p>
     </div>
   );
 }
