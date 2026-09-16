@@ -17,14 +17,14 @@ pipeline {
         }
         stage('3. Login to DockerHub') {
             steps {
-                sh(script: 'echo $DOCKER_CREDS_PSW | docker login -u $DOCKER_CREDS_USR --password-stdin')
+                sh(script: 'echo $DOCKER_CREDS_PSW | sudo docker login -u $DOCKER_CREDS_USR --password-stdin')
             }
         }
         stage('4. Remove Image if exist') {
           steps{
             script {
                def prevBuild = env.BUILD_NUMBER.toInteger() - 1
-                 sh(script: "docker rmi rag-ui:v${prevBuild} || true")
+                 sh(script: "sudo docker rmi rag-ui:v${prevBuild} || true")
             }
           }
           
@@ -52,7 +52,7 @@ pipeline {
     }
     post {
         always {
-            sh 'docker logout'
+            sh 'sudo docker logout'
         }
     }
 }
