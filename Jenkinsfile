@@ -100,22 +100,22 @@ pipeline {
         }
         stage('4. Build Docker Image') {
             steps {
-                sh(script: "docker build --platform=linux/arm64 -t rag-ui:v${env.BUILD_NUMBER} .")
+                sh(script: "sudo docker build --platform=linux/arm64 -t rag-ui:v${env.BUILD_NUMBER} .")
             }
         }
         stage('5. Tag image for DockerHub') {
             steps {
-                sh(script: "docker tag rag-ui:v${env.BUILD_NUMBER} makarajr126/rag-ui:v${env.BUILD_NUMBER}")
+                sh(script: "sudo docker tag rag-ui:v${env.BUILD_NUMBER} makarajr126/rag-ui:v${env.BUILD_NUMBER}")
             }
         }
         stage('6. Checking docker image') {
             steps {
-                sh 'docker images | grep rag-ui'
+                sh 'sudo docker images | grep rag-ui'
             }
         }
         stage('7. Push to DockerHub') {
             steps {
-                sh(script: "docker push makarajr126/rag-ui:v${env.BUILD_NUMBER}")
+                sh(script: "sudo docker push makarajr126/rag-ui:v${env.BUILD_NUMBER}")
             }
         }
     }
