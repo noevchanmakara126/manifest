@@ -45,20 +45,29 @@ pipeline {
             }
         }
         stage('8. Update manifest repo') {
-            steps {
-                sshagent(credentials: ['ssh-inside']) {
-                    sh """
+             steps {
+                     sh """
+                        set -e
                         cd manifest
                         rm -rf argo
-                        git clone git@github.com:noevchanmakara126/argo.git
+                        git clone https://github.com/noevchanmakara126/argo.git
                         cd argo
-                        sed -i "s/tag: .*/tag: ${IMAGE_TAG}/" values.yaml
-                        git add .
-                        git commit -m "Update rag-ui image to ${IMAGE_TAG}"
-                        git push origin main
-                    """
-                }
-            }
+
+            sed -i "s/tag: .*/tag: \\"${IMAGE_TAG}\\"/" values.yaml
+
+            git config user.email "jenkins@ci.local"
+            git config user.name "jenkins"
+
+            git add values.yaml
+
+            if git diff --cached --quiet; then
+                echo "No changes to commit"
+            else
+                git commit -m "Update rag-ui image to ${IMAGE_TAG}"
+                git push origin main
+            fi
+        """
+    }
         }
     }
     post {
