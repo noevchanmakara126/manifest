@@ -22,7 +22,7 @@ pipeline {
         }
         stage('4. Build Docker Image') {
             steps {
-                sh(script: "sudo docker build --platform=linux/arm64 -t rag-ui:v${env.BUILD_NUMBER} .")
+                sh(script: "sudo docker build -t rag-ui:v${env.BUILD_NUMBER} .")
             }
         }
         stage('5. Tag image for DockerHub') {

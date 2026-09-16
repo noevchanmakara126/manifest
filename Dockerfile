@@ -76,10 +76,5 @@ USER 10001:10001
 
 EXPOSE 3000
 
-# No HEALTHCHECK: kubelet ignores it, and the only route that could stand in for
-# one is `/`, which renders the catalogue — a backend outage would then restart
-# a perfectly healthy frontend. Add a /api/health route and point the probes at
-# that instead.
 
-# Direct exec — PID 1 is node, so SIGTERM reaches it and the pod drains cleanly.
 CMD ["node", "server.js"]
