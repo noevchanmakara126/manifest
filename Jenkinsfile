@@ -1,32 +1,75 @@
 pipeline {
     agent  any 
     stages {
-        stage('greeting'){
+        stage('1.Greeting'){
             steps {
-              echo 'hello bong bong'
+              echo 'Hello this Jenkins'
             }
         }
-        stage('checking directory'){
+        stage('2. Checking Directory'){
           steps {
             sh 'pwd'
             sh 'whoami'
           }      
         }
-        stage('build next js'){
-           steps{
-            sh 'npm run build'
-           }  
+        stage('3. Login to DockerHub') {
+          steps {
+            script {
+              def result = sh (
+                script ('docker login -u makarajr126'),
+                returnStdout: true
+              ).trim()
+              echo "Login Result : ${result}" 
+            }
+          }
+         
         }
+        stage('4. Build  Docker Image'){
+          steps{
+            script {
+              def image = sh (
+                script("docker build --platform=linux/arm64 -t rag-ui:v${build number} ."),
+                returnStdout: true
+              )
+              echo "This is resutl of build image : ${image}"
+            }
+          }
+        }
+        stage('5. Tag image with Dockerhub'){
+          steps{
+             script {
+              def taged = sh (
+                script("docker tag makarajr126/rag-ui rag-ui:v${build number}"),
+                returnStdout: true
+              )
+              echo "This is resutl of tag : ${taged}"
+            }
+          }
+        }
+        stage("6. Checking docker image"){
+          steps{
+           script {
+              def image = sh (
+                script("docker ps"),
+                returnStdout: true
+              )
+              echo "This is docker image : ${image}"
+            }
+          }
+        }
+        stage('7. Push to Dockerhub'){
+          steps{
+             script {
+              def pushed = sh (
+                script("docker push makarajr126/rag-ui:v${build number}"),
+                returnStdout: true
+              )
+              echo "This is resutl after pushed : ${pushed}"
+            }
+          }
+        }
+
+  
     }
-    post {
-      always {
-        echo ('this is always run now matter error or not')
-      }
-      success {
-        echo('only run when the pipeline success')
-      }
-      failure {
-        echo('this will show when error')
-      }
-    }
+    
 }
