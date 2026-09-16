@@ -12,10 +12,11 @@ pipeline {
             sh 'whoami'
           }      
         }
-        stage('build next js ')
+        stage('build next js'){
            steps{
             sh 'npm run build'
            }  
+        }
     }
     post {
       always {
