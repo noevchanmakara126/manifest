@@ -20,11 +20,14 @@ pipeline {
                 sh(script: 'echo $DOCKER_CREDS_PSW | docker login -u $DOCKER_CREDS_USR --password-stdin')
             }
         }
-         stage('4. Remove Image if exist') {
+        stage('4. Remove Image if exist') {
+          steps{
             script {
                def prevBuild = env.BUILD_NUMBER.toInteger() - 1
                  sh(script: "docker rmi rag-ui:v${prevBuild} || true")
             }
+          }
+          
         }
         stage('5. Build Docker Image') {
             steps {
