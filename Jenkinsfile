@@ -46,7 +46,7 @@ pipeline {
         }
         stage('8. Push to DockerHub') {
             steps {
-                sh(script: "sudo docker push makarajr126/rag-ui:v${env.BUILD_NUMBER}")
+                sh(script: "sudo docker push makarajr126/rag-ui")
             }
         }
     }
