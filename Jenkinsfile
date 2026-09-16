@@ -36,7 +36,7 @@ pipeline {
         }
         stage('6. Tag image for DockerHub') {
             steps {
-                sh(script: "sudo docker tag rag-ui makarajr126/rag-ui")
+                sh(script: "sudo docker tag rag-ui:v${env.BUILD_NUMBER} makarajr126/rag-ui")
             }
         }
         stage('7. Checking docker image') {
@@ -46,7 +46,7 @@ pipeline {
         }
         stage('8. Push to DockerHub') {
             steps {
-                sh(script: "sudo docker push makarajr126/rag-ui")
+                sh(script: " docker push makarajr126/rag-ui")
             }
         }
     }
