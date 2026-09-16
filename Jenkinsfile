@@ -36,7 +36,7 @@ pipeline {
         }
         stage('6. Tag image for DockerHub') {
             steps {
-                sh(script: "sudo docker tag rag-ui makarajr126/rag-ui")
+                sh(script: "sudo docker tag rag-ui ${DOCKER_CREDS_USR}/rag-ui")
             }
         }
         stage('7. Checking docker image') {
@@ -46,7 +46,7 @@ pipeline {
         }
         stage('8. Push to DockerHub') {
             steps {
-                sh(script: "sudo docker push rag-ui")
+                sh(script: "sudo docker push $DOCKER_CREDS_USR /rag-ui")
             }
         }
     }
