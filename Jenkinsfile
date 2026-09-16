@@ -6,11 +6,16 @@ pipeline {
               echo 'hello bong bong'
             }
         }
-        stage('bye'){
+        stage('checking directory'){
           steps {
-            echo 'bye bye everyone'
+            sh 'pwd'
+            sh 'whoami'
           }      
-        }   
+        }
+        stage('build next js ')
+           steps{
+            sh 'npm run build'
+           }  
     }
     post {
       always {
