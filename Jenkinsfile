@@ -46,7 +46,7 @@ pipeline {
         }
         stage('8. Push to DockerHub') {
             steps {
-                sh(script: "sudo docker push $DOCKER_CREDS_USR /rag-ui")
+                sh(script: "sudo docker push $DOCKER_CREDS_USR/rag-ui")
             }
         }
     }
