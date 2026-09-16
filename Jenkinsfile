@@ -54,6 +54,8 @@ pipeline {
                         git clone https://github.com/noevchanmakara126/argo.git
                         cd argo
                         sed -i "s/tag: .*/tag: \\"${IMAGE_TAG}\\"/" values.yaml
+                        git config user.email "jenkins@ci.local"
+                        git config user.name "jenkins"
                         git add values.yaml
                         if git diff --cached --quiet; then
                         echo "No changes to commit"
