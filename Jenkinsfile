@@ -2,12 +2,12 @@ pipeline {
     agent  any 
     stages {
         stage('greeting'){
-            step {
+            steps {
               echo 'hello bong bong'
             }
         }
         stage('bye'){
-          step {
+          steps {
             echo 'bye bye everyone'
           }      
         }   
