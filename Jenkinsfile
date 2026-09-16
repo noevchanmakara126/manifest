@@ -3,7 +3,6 @@ pipeline {
     environment {
         DOCKER_CREDS = credentials('dockerhub-credentials')
         IMAGE_TAG = "v${env.BUILD_NUMBER}"
-
     }
     stages {
         stage('1. Greeting') {
@@ -23,47 +22,43 @@ pipeline {
             }
         }
         stage('4. Remove Image if exist') {
-          steps{
-            script {
-               def prevBuild = env.BUILD_NUMBER.toInteger() - 1
-                 sh(script: "sudo docker rmi rag-ui:v${prevBuild} || true")
+            steps {
+                script {
+                    def prevBuild = env.BUILD_NUMBER.toInteger() - 1
+                    sh(script: "sudo docker rmi ${DOCKER_CREDS_USR}/rag-ui:v${prevBuild} || true")
+                }
             }
-          }
-          
         }
         stage('5. Build Docker Image') {
             steps {
                 sh(script: "sudo docker build -t ${DOCKER_CREDS_USR}/rag-ui:${IMAGE_TAG} .")
             }
         }
-        stage('6. Tag image for DockerHub') {
-            steps {
-                sh(script: "sudo docker tag rag-ui ${DOCKER_CREDS_USR}/rag-ui:${IMAGE_TAG}")
-            }
-        }
-        stage('7. Checking docker image') {
+        stage('6. Checking docker image') {
             steps {
                 sh 'sudo docker images | grep rag-ui'
             }
         }
-         stage('8. Clone manifest repo ') {
-            steps {
-              sshagent(credentials: ['ssh-inside']){
-                sh """
-                   git clone https://github.com/noevchanmakara126/argo.git
-                   sed -i "s/tag: .*/tag: ${IMAGE_TAG}/" templates_or_values_path/values.yaml
-                   git config user.email "jenkins@ci.local"
-                   git config user.name "jenkins"
-                   git add .
-                   git commit -m "Update rag-ui image to ${IMAGE_TAG}"
-                   git push origin main
-                 """ 
-              }
-            }
-        }
-        stage('9. Push to DockerHub') {
+        stage('7. Push to DockerHub') {
             steps {
                 sh(script: "sudo docker push ${DOCKER_CREDS_USR}/rag-ui:${IMAGE_TAG}")
+            }
+        }
+        stage('8. Update manifest repo') {
+            steps {
+                sshagent(credentials: ['ssh-inside']) {
+                    sh """
+                        rm -rf argo
+                        git clone git@github.com:noevchanmakara126/argo.git
+                        cd argo
+                        sed -i "s/tag: .*/tag: ${IMAGE_TAG}/" values.yaml
+                        git config user.email "jenkins@ci.local"
+                        git config user.name "jenkins"
+                        git add .
+                        git commit -m "Update rag-ui image to ${IMAGE_TAG}"
+                        git push origin main
+                    """
+                }
             }
         }
     }
