@@ -20,15 +20,15 @@ pipeline {
                 sh(script: 'echo $DOCKER_CREDS_PSW | sudo docker login -u $DOCKER_CREDS_USR --password-stdin')
             }
         }
-        stage('4. Remove Image if exist') {
-          steps{
-            script {
-               def prevBuild = env.BUILD_NUMBER.toInteger() - 1
-                 sh(script: "sudo docker rmi rag-ui:v${prevBuild} || true")
-            }
-          }
+        // stage('4. Remove Image if exist') {
+        //   steps{
+        //     script {
+        //        def prevBuild = env.BUILD_NUMBER.toInteger() - 1
+        //          sh(script: "sudo docker rmi rag-ui:v${prevBuild} || true")
+        //     }
+        //   }
           
-        }
+        // }
         stage('5. Build Docker Image') {
             steps {
                 sh(script: "sudo docker build -t rag-ui .")
@@ -36,7 +36,7 @@ pipeline {
         }
         stage('6. Tag image for DockerHub') {
             steps {
-                sh(script: "sudo docker tag rag-ui:v${env.BUILD_NUMBER} makarajr126/rag-ui")
+                sh(script: "sudo docker tag rag-ui makarajr126/rag-ui")
             }
         }
         stage('7. Checking docker image') {
@@ -46,7 +46,7 @@ pipeline {
         }
         stage('8. Push to DockerHub') {
             steps {
-                sh(script: " docker push makarajr126/rag-ui")
+                sh(script: "sudo docker push makarajr126/rag-ui")
             }
         }
     }
