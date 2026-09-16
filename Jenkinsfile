@@ -20,22 +20,28 @@ pipeline {
                 sh(script: 'echo $DOCKER_CREDS_PSW | docker login -u $DOCKER_CREDS_USR --password-stdin')
             }
         }
-        stage('4. Build Docker Image') {
-            steps {
-                sh(script: "sudo docker build -t rag-ui:v${env.BUILD_NUMBER} .")
+         stage('4. Remove Image if exist') {
+            script {
+               def prevBuild = env.BUILD_NUMBER.toInteger() - 1
+                 sh(script: "docker rmi rag-ui:v${prevBuild} || true")
             }
         }
-        stage('5. Tag image for DockerHub') {
+        stage('5. Build Docker Image') {
             steps {
-                sh(script: "sudo docker tag rag-ui:v${env.BUILD_NUMBER} makarajr126/rag-ui:v${env.BUILD_NUMBER}")
+                sh(script: "sudo docker build -t rag-ui .")
             }
         }
-        stage('6. Checking docker image') {
+        stage('6. Tag image for DockerHub') {
+            steps {
+                sh(script: "sudo docker tag rag-ui makarajr126/rag-ui")
+            }
+        }
+        stage('7. Checking docker image') {
             steps {
                 sh 'sudo docker images | grep rag-ui'
             }
         }
-        stage('7. Push to DockerHub') {
+        stage('8. Push to DockerHub') {
             steps {
                 sh(script: "sudo docker push makarajr126/rag-ui:v${env.BUILD_NUMBER}")
             }
