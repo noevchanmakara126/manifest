@@ -52,8 +52,8 @@ pipeline {
                         git clone git@github.com:noevchanmakara126/argo.git
                         cd argo
                         sed -i "s/tag: .*/tag: ${IMAGE_TAG}/" values.yaml
-                        git config user.email "jenkins@ci.local"
-                        git config user.name "jenkins"
+                        git config user.email "jrmakara97@gmail.com"
+                        git config user.name "Noev Chanmakara"
                         git add .
                         git commit -m "Update rag-ui image to ${IMAGE_TAG}"
                         git push origin main
